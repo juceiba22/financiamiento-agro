@@ -1,0 +1,73 @@
+.section {
+  background-color: var(--color-bg-main);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.columnTitle {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.columnTitle small {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stepCard {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.stepCard:hover {
+  transform: translateX(5px);
+  background: rgba(40, 40, 45, 0.8);
+}
+
+.icon {
+  font-size: 1.8rem;
+  color: var(--color-accent-gold);
+  margin-top: 0.2rem;
+}
+
+.iconPlatform {
+  font-size: 1.8rem;
+  color: var(--color-primary-green);
+  margin-top: 0.2rem;
+}
+
+.stepCard h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stepCard p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

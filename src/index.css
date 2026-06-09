@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --color-bg-main: #0a0a0c;
+  --color-bg-secondary: #141416;
+  --color-bg-card: #1c1c1f;
+  
+  --color-text-main: #f4f4f5; /* Chalk white */
+  --color-text-muted: #a1a1aa;
+  
+  --color-primary-green: #3B6951; /* Leaf green */
+  --color-primary-green-hover: #4a8264;
+  
+  --color-accent-gold: #c69b6a; /* Matte copper gold */
+  --color-accent-gold-hover: #d8af82;
+
+  --color-border: #27272a;
+
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Premium Utilities */
+.section-padding {
+  padding: 6rem 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.125rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-green);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(59, 105, 81, 0.4);
+}
+
+.btn-gold {
+  background-color: transparent;
+  color: var(--color-accent-gold);
+  border: 1px solid var(--color-accent-gold);
+}
+
+.btn-gold:hover {
+  background-color: rgba(198, 155, 106, 0.1);
+  box-shadow: 0 4px 20px rgba(198, 155, 106, 0.2);
+}
+
+/* Gradients and Highlights */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-accent-gold) 0%, #e0b889 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-green {
+  background: linear-gradient(135deg, var(--color-primary-green) 0%, #5ba07a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Micro-animations and effects */
+.glass-panel {
+  background: rgba(28, 28, 31, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
