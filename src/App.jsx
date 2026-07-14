@@ -1,24 +1,23 @@
 import React from 'react';
-import Header from './components/Header';
-import ValueProp from './components/ValueProp';
-import Rules from './components/Rules';
-import Cooperative from './components/Cooperative';
-import Sectors from './components/Sectors';
-import Security from './components/Security';
-import Contact from './components/Contact';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Tabaco from './components/Tabaco';
 import './index.css';
 
 function App() {
   return (
-    <div className="app-container">
-      <Header />
-      <ValueProp />
-      <Rules />
-      <Cooperative />
-      <Sectors />
-      <Security />
-      <Contact />
-    </div>
+    <Router>
+      <div className="app-container">
+        <Navbar />
+        <div style={{ paddingTop: '70px' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Tabaco" element={<Tabaco />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 
