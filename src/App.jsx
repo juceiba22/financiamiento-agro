@@ -13,7 +13,7 @@ function App() {
         <div style={{ paddingTop: '70px' }}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/Tabaco" element={<Tabaco />} />
+            <Route path="/tabaco" element={<Tabaco />} />
           </Routes>
         </div>
       </div>
