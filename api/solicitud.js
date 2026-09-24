@@ -29,6 +29,7 @@ function validate(body) {
   };
   const lineas = { monto: str(l.monto, 100), plazo: str(l.plazo, 100), destino: str(l.destino, 2000) };
   const comentarios = str(body?.comentarios, 3000);
+  const rubro = str(body?.rubro, 100) || 'Tabaco';
   const id = str(body?.id, 36);
 
   if (!UUID_RE.test(id)) return { error: 'Solicitud inválida.' };
@@ -60,7 +61,7 @@ function validate(body) {
     if (n > MAX_FILES_PER_DOC) return { error: 'Demasiados archivos en un documento.' };
   }
 
-  return { id, empresa, lineas, comentarios, archivos: clean };
+  return { id, rubro, empresa, lineas, comentarios, archivos: clean };
 }
 
 async function download(bucket, pathname) {
@@ -75,8 +76,8 @@ async function download(bucket, pathname) {
 // y el email sale igual. Los archivos solo se registran si la solicitud se creó (nunca se agregan
 // archivos a una solicitud existente).
 async function registrar(supabase, data, files) {
-  const { id, empresa, lineas, comentarios } = data;
-  const notes = [ORIGEN, comentarios].filter(Boolean).join('\n').slice(0, 2000);
+  const { id, rubro, empresa, lineas, comentarios } = data;
+  const notes = [ORIGEN, `Rubro: ${rubro}`, comentarios].filter(Boolean).join('\n').slice(0, 2000);
 
   const { error } = await supabase.from('documentation_submissions').insert({
     id,
@@ -110,7 +111,7 @@ async function registrar(supabase, data, files) {
   if (filesError) console.error('registrar documentation_files', filesError);
 }
 
-function buildHtml({ id, empresa, lineas, comentarios, archivos }, part, total) {
+function buildHtml({ id, rubro, empresa, lineas, comentarios, archivos }, part, total) {
   const row = (k, v) =>
     `<tr><td style="padding:6px 12px 6px 0;color:#55635b;vertical-align:top;white-space:nowrap">${k}</td><td style="padding:6px 0;color:#151e17">${v}</td></tr>`;
   const byDoc = DOCS.filter((d) => d.key !== 'lineas_solicitadas' || archivos.some((a) => a.doc === 'lineas_solicitadas'))
@@ -126,6 +127,7 @@ function buildHtml({ id, empresa, lineas, comentarios, archivos }, part, total) 
   <p style="color:#727973;margin:0 0 16px;font-size:12px">ID ${esc(id)}${total > 1 ? ` · Email ${part} de ${total}` : ''}</p>
   <h3 style="color:#132a1e">Datos de la empresa</h3>
   <table style="border-collapse:collapse;font-size:14px">
+    ${row('Rubro', esc(rubro))}
     ${row('Razón social', esc(empresa.razonSocial))}
     ${row('CUIT', esc(empresa.cuit))}
     ${row('Contacto', esc(empresa.contacto))}

@@ -160,6 +160,10 @@ const Financiamiento = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [touched, setTouched] = useState({});
 
+  const rubroNombre = rubro === 'tabaco' ? 'Tabaco' : otroRubro.trim();
+  // Como en agrotabaco.com: con la primera letra del rubro ya se muestran los requisitos
+  const showReqs = rubro === 'tabaco' || (rubro === 'otro' && rubroNombre !== '');
+
   const docs = useMemo(() => DOCS.filter((d) => !d.onlySA || empresa.esSA), [empresa.esSA]);
   const lineasOk = lineas.monto.trim() && lineas.plazo.trim() && lineas.destino.trim();
   const docsDone = docs.filter((d) => (d.key === 'lineas_solicitadas' ? lineasOk : (files[d.key] || []).length > 0)).length;
@@ -221,7 +225,7 @@ const Financiamiento = () => {
       const res = await fetch('/api/solicitud', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, empresa, lineas, comentarios, archivos: uploaded }),
+        body: JSON.stringify({ id, rubro: rubroNombre, empresa, lineas, comentarios, archivos: uploaded }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'No pudimos enviar la documentación.');
@@ -293,23 +297,10 @@ const Financiamiento = () => {
                 onChange={(e) => setOtroRubro(e.target.value)}
                 placeholder="Ej.: yerba mate, caña de azúcar, ganadería…"
               />
-              {otroRubro.trim() && (
-                <a
-                  className={`btn btn-primary ${styles.waBtn}`}
-                  href={whatsappLink(
-                    `¡Hola! Quiero conseguir financiamiento por medio del Mercado de Valores. Mi rubro es: ${otroRubro.trim()}.`
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaWhatsapp aria-hidden="true" />
-                  Consultar por WhatsApp
-                </a>
-              )}
             </div>
           )}
 
-          {rubro === 'tabaco' && (
+          {showReqs && (
             <div className={styles.stepBlock}>
               <p className={styles.label}>Para calificar como Persona Jurídica necesitamos la siguiente documentación:</p>
               <ul className={styles.reqList}>
@@ -332,7 +323,11 @@ const Financiamiento = () => {
                   <a
                     className="btn btn-primary"
                     href={whatsappLink(
-                      '¡Hola! Soy de una cooperativa o empresa tabacalera y quiero que un representante se contacte conmigo para terminar la operación de financiamiento en el Mercado de Valores.'
+                      `¡Hola! ${
+                        rubro === 'tabaco'
+                          ? 'Soy de una cooperativa o empresa tabacalera'
+                          : `Soy de una empresa del rubro ${rubroNombre}`
+                      } y quiero que un representante se contacte conmigo para terminar la operación de financiamiento en el Mercado de Valores.`
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -346,7 +341,7 @@ const Financiamiento = () => {
           )}
         </div>
 
-        {rubro === 'tabaco' && modo === 'cargar' && (
+        {showReqs && modo === 'cargar' && (
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             <div className="card">
               <h2 className={styles.blockTitle}>Datos de la empresa</h2>

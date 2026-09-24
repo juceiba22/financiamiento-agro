@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HiArrowRight, HiBars3, HiXMark } from 'react-icons/hi2';
-import { TABAR_URL } from '../config';
+import { AGROTABACO_URL, TABAR_URL } from '../config';
 import styles from './Navbar.module.css';
 
 const LINKS = [
@@ -44,13 +44,13 @@ const Navbar = () => {
 
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          <Link to="/" className={styles.logo} onClick={close}>
+          <a href={AGROTABACO_URL} target="_blank" rel="noopener noreferrer" className={styles.logo} onClick={close}>
             <LogoMark />
             <div>
-              <div className={styles.logoTitle}>Financiamiento Agro</div>
+              <div className={styles.logoTitle}>AgroTabaco</div>
               <div className={styles.logoSub}>Instrumentos Financieros Digitales</div>
             </div>
-          </Link>
+          </a>
 
           <div className={`${styles.links} ${open ? styles.linksOpen : ''}`}>
             {LINKS.map((l) => (

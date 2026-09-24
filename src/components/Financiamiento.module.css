@@ -119,10 +119,6 @@
   color: var(--tb-secondary);
 }
 
-.waBtn {
-  align-self: flex-start;
-}
-
 .waBox {
   background: var(--tb-surface-tint);
   border: 1px solid #d8e5dc;
