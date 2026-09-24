@@ -72,8 +72,8 @@ async function download(bucket, pathname) {
   return buf;
 }
 
-// Registra la solicitud en las tablas del portal. No bloquea el envío: si falla, queda en los logs
-// y el email sale igual. Los archivos solo se registran si la solicitud se creó (nunca se agregan
+// Registra la solicitud en las tablas del portal y devuelve si quedó guardada. Si falla, queda en los
+// logs y el email sale igual. Los archivos solo se registran si la solicitud se creó (nunca se agregan
 // archivos a una solicitud existente).
 async function registrar(supabase, data, files) {
   const { id, rubro, empresa, lineas, comentarios } = data;
@@ -94,8 +94,8 @@ async function registrar(supabase, data, files) {
     status: 'nuevo',
   });
   if (error) {
-    console.error('registrar documentation_submissions', error);
-    return;
+    console.error('[solicitud] ERROR insertando en documentation_submissions:', error);
+    return false;
   }
 
   const { error: filesError } = await supabase.from('documentation_files').insert(
@@ -108,7 +108,9 @@ async function registrar(supabase, data, files) {
       size_bytes: f.size,
     }))
   );
-  if (filesError) console.error('registrar documentation_files', filesError);
+  if (filesError) console.error('[solicitud] ERROR insertando en documentation_files:', filesError);
+  // La solicitud y sus archivos quedan en Supabase aunque falle el registro de los archivos en la tabla
+  return true;
 }
 
 function buildHtml({ id, rubro, empresa, lineas, comentarios, archivos }, part, total) {
@@ -163,11 +165,11 @@ export default async function handler(req, res) {
   const data = validate(req.body);
   if (data.error) return res.status(400).json({ error: data.error });
 
+  // 1. Descarga y arma los adjuntos, repartidos en tandas de hasta MAX_BATCH_BYTES
+  const bucket = supabase.storage.from(BUCKET);
+  const batches = [[]];
+  const registrados = [];
   try {
-    // Descarga y arma los adjuntos, repartidos en tandas de hasta MAX_BATCH_BYTES
-    const bucket = supabase.storage.from(BUCKET);
-    const batches = [[]];
-    const registrados = [];
     let batchSize = 0;
     for (const a of data.archivos) {
       const content = await download(bucket, a.pathname);
@@ -180,12 +182,24 @@ export default async function handler(req, res) {
       batches[batches.length - 1].push({ filename: `${prefix}_${a.name}`, content });
       batchSize += content.length;
     }
+  } catch (err) {
+    console.error('[solicitud] ERROR descargando archivos de Supabase:', err);
+    return res.status(502).json({ error: 'No pudimos procesar los archivos. Intentá nuevamente en unos minutos.' });
+  }
 
-    await registrar(supabase, data, registrados).catch((err) => console.error('registrar', err));
+  // 2. Registro en las tablas del portal
+  const registrada = await registrar(supabase, data, registrados).catch((err) => {
+    console.error('[solicitud] ERROR registrando en tablas:', err);
+    return false;
+  });
 
+  // 3. Aviso por email. Si la solicitud ya quedó registrada, un fallo del email no se le muestra al usuario
+  try {
     const resend = new Resend(RESEND_API_KEY);
     const to = SOLICITUDES_EMAIL_TO.split(',').map((s) => s.trim()).filter(Boolean);
-    const from = SOLICITUDES_EMAIL_FROM || 'Financiamiento Agro <onboarding@resend.dev>';
+    // Si la variable trae solo el email, se le agrega el nombre visible del remitente
+    const fromEmail = (SOLICITUDES_EMAIL_FROM || 'onboarding@resend.dev').trim();
+    const from = fromEmail.includes('<') ? fromEmail : `AgroTabaco <${fromEmail}>`;
 
     for (let i = 0; i < batches.length; i++) {
       const suffix = batches.length > 1 ? ` (${i + 1}/${batches.length})` : '';
@@ -197,12 +211,14 @@ export default async function handler(req, res) {
         html: buildHtml(data, i + 1, batches.length),
         attachments: batches[i],
       });
-      if (error) throw new Error(error.message || 'Error de Resend');
+      if (error) throw new Error(`${error.name || 'resend'}: ${error.message}`);
     }
-
-    return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error('solicitud', err);
-    return res.status(502).json({ error: 'No pudimos enviar la documentación. Intentá nuevamente en unos minutos.' });
+    console.error(`[solicitud] ERROR enviando email con Resend (from=${SOLICITUDES_EMAIL_FROM || 'onboarding@resend.dev'}):`, err);
+    if (!registrada) {
+      return res.status(502).json({ error: 'No pudimos enviar la documentación. Intentá nuevamente en unos minutos.' });
+    }
   }
+
+  return res.status(200).json({ ok: true });
 }

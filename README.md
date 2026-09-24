@@ -26,7 +26,8 @@ calificar como Persona Jurídica.
    - `SUPABASE_BUCKET` — opcional, por defecto `documentacion`.
    - `RESEND_API_KEY`
    - `SOLICITUDES_EMAIL_TO` — quién recibe las solicitudes.
-   - `SOLICITUDES_EMAIL_FROM` — opcional. Sin dominio verificado se usa `onboarding@resend.dev`, que solo
+   - `SOLICITUDES_EMAIL_FROM` — solo el email, p. ej. `solicitudes@agrotabaco-labs.com` (dominio verificado
+     en Resend; el nombre "AgroTabaco" se agrega solo). Sin esta variable se usa `onboarding@resend.dev`, que solo
      puede enviar al email con el que se creó la cuenta de Resend.
 4. Volver a desplegar.
 
