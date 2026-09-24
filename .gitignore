@@ -22,11 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-<<<<<<< HEAD
 
 # Vercel / variables de entorno
 .vercel
 .env
 .env*.local
-=======
->>>>>>> 918a8b4cb729dc29fcb882af5a2ed04ff1ab91e9

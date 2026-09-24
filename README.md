@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Financiamiento Agro
 
 Landing de instrumentos financieros digitales (warrants en el MAV) y formulario de documentación para
@@ -40,21 +39,3 @@ npm run dev
 
 `npm run dev` sirve solo el frontend. Para probar el envío del formulario en local hace falta
 `vercel dev` (Vercel CLI) con las variables de entorno cargadas (`vercel env pull`).
-=======
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
->>>>>>> 918a8b4cb729dc29fcb882af5a2ed04ff1ab91e9
