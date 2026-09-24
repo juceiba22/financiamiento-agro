@@ -1,0 +1,26 @@
+.section {
+  background-color: var(--color-bg-secondary);
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  padding: 4rem 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  border-left: 4px solid var(--color-accent-gold);
+}
+
+.text {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: var(--color-text-main);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 2.5rem 1.5rem;
+  }
+}

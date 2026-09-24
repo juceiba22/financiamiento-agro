@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HiArrowRight, HiBars3, HiXMark } from 'react-icons/hi2';
@@ -80,6 +81,25 @@ const Navbar = () => {
         </div>
       </nav>
     </>
+=======
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styles from './Navbar.module.css';
+
+const Navbar = () => {
+  return (
+    <nav className={styles.navbar}>
+      <div className={`container ${styles.navContainer}`}>
+        <Link to="/" className={styles.logo}>
+          Financiamiento<span className="text-gradient-green">Agro</span>
+        </Link>
+        <div className={styles.links}>
+          <Link to="/" className={styles.link}>Inicio</Link>
+          <Link to="/tabaco" className={styles.link}>Sector Tabaco</Link>
+        </div>
+      </div>
+    </nav>
+>>>>>>> 918a8b4cb729dc29fcb882af5a2ed04ff1ab91e9
   );
 };
 

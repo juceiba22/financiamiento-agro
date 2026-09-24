@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import {
   HiArrowRight,
@@ -312,5 +313,29 @@ const Home = () => (
     <Tabar />
   </>
 );
+=======
+import React from 'react';
+import Header from './Header';
+import ValueProp from './ValueProp';
+import Rules from './Rules';
+import Cooperative from './Cooperative';
+import Sectors from './Sectors';
+import Security from './Security';
+import Contact from './Contact';
+
+const Home = () => {
+  return (
+    <>
+      <Header />
+      <ValueProp />
+      <Rules />
+      <Cooperative />
+      <Sectors />
+      <Security />
+      <Contact />
+    </>
+  );
+};
+>>>>>>> 918a8b4cb729dc29fcb882af5a2ed04ff1ab91e9
 
 export default Home;
